@@ -84,5 +84,23 @@
   <div id="root"></div>
   <!-- Updated script type to text/babel for Babel to transpile -->
   <script type="text/babel" data-type="module" src="./index.tsx"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Construct the path to sw.js relative to the current page's location.
+        // This is important for deployments in subdirectories, like GitHub Pages.
+        const swPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'sw.js';
+        navigator.serviceWorker.register(swPath)
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope:', registration.scope);
+          })
+          .catch(error => {
+            console.error('Service worker registration failed:', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>

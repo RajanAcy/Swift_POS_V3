@@ -16,28 +16,6 @@ export type ViewName = 'dashboard' | 'products' | 'sales' | 'suppliers' | 'expen
 const App: React.FC = () => {
     const [activeView, setActiveView] = useState<ViewName>('dashboard');
 
-    useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            const registerServiceWorker = () => {
-                const swPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1) + 'sw.js';
-                navigator.serviceWorker.register(swPath)
-                    .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    })
-                    .catch(err => {
-                        console.error('Service worker registration failed:', err);
-                    });
-            };
-
-            if (document.readyState === 'complete') {
-                registerServiceWorker();
-            } else {
-                window.addEventListener('load', registerServiceWorker);
-                return () => window.removeEventListener('load', registerServiceWorker);
-            }
-        }
-    }, []);
-
     const viewComponent = useMemo(() => {
         switch (activeView) {
             case 'dashboard': return <Dashboard />;
