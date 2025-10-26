@@ -1,0 +1,7 @@
+{
+  "name": "GIT_Swift_POS_V3",
+  "description": "An offline-capable Point of Sale system for retail and restaurants, built with React and Tailwind CSS. Manage products, sales, customers, and generate reports with ease, including barcode scanning and multi-language support.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

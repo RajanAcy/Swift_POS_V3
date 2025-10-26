@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1e40af">
+  <meta name="description" content="Swift POS System for inventory and sales management">
+  <title>Swift POS - React System</title>
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="./manifest.json">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+  <!-- Added Babel Standalone for in-browser TSX transpilation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap');
+    :root {
+      --primary-color: #1e40af; /* Dark Blue */
+      --primary-hover: #1e3a8a; /* Darker Blue */
+      --secondary-color: #98c1d9;
+      --accent-color: #e0fbfc;
+      --text-dark: #2d3748;
+      --text-light: #4a5568;
+      --bg-main: #f7fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+    }
+    .myanmar-font {
+      font-family: 'Noto Sans Myanmar', sans-serif;
+    }
+    .active-tab {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    #barcode-scanner-container video, #barcode-scanner-container canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+    #barcode-scanner-container canvas.drawingBuffer {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .receipt-80mm { width: 72mm; font-size: 10pt; line-height: 1.4; }
+    .receipt-58mm { width: 48mm; font-size: 9pt; line-height: 1.4; }
+    .receipt-standard { width: 100%; }
+
+    @media print {
+      body * { visibility: hidden; }
+      .receipt-print-area, .receipt-print-area * { visibility: visible; }
+      .receipt-print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 10px;
+        box-shadow: none;
+        border: none;
+      }
+      .no-print { display: none; }
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.3.0"
+  }
+}
+</script>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!-- Updated script type to text/babel for Babel to transpile -->
+  <script type="text/babel" data-type="module" src="./index.tsx"></script>
+</body>
+</html>
