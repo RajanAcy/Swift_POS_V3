@@ -12,8 +12,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
-  <!-- Added Babel Standalone for in-browser TSX transpilation -->
+  
+  <!-- Add Babel Standalone for in-browser JSX/TSX transpilation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap');
@@ -83,7 +85,8 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  <!-- Updated script type to text/babel for Babel to transpile -->
+  
+  <!-- Transpile and run the main app script using Babel -->
   <script type="text/babel" data-type="module" src="./index.tsx"></script>
 
   <!-- Service Worker Registration -->
