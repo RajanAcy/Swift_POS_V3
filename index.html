@@ -13,9 +13,6 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
   
-  <!-- Add Babel Standalone for in-browser JSX/TSX transpilation -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap');
@@ -70,24 +67,11 @@
       .no-print { display: none; }
     }
   </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client.js",
-    "recharts": "https://aistudiocdn.com/recharts@^3.3.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
-  }
-}
-</script>
 </head>
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  
-  <!-- Transpile and run the main app script using Babel -->
-  <script type="text/babel" data-type="module" src="./index.tsx"></script>
+  <script type="module" src="./index.tsx"></script>
 
   <!-- Service Worker Registration -->
   <script>
