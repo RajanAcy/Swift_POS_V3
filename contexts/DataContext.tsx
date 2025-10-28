@@ -3,6 +3,7 @@ import { Product, Sale, Supplier, Expense, Customer, CompanyInfo, SystemSettings
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { DEFAULT_CATEGORIES } from '../constants';
 import { useLanguage } from './LanguageContext';
+import { get, set } from 'idb-keyval';
 
 // --- Helper Functions ---
 const generateId = (): string => Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
@@ -21,6 +22,7 @@ interface DataContextType {
     systemSettings: SystemSettings;
     categories: Category[];
     isInIframe: boolean;
+    isFileSystemApiSupported: boolean;
 
     // Mutators
     addProduct: (product: Omit<Product, 'id'>) => void;
@@ -93,6 +95,19 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [directoryHandle, setDirectoryHandle] = useState<any | null>(null);
     const [isInIframe, setIsInIframe] = useState(false);
+    const [isFileSystemApiSupported, setIsFileSystemApiSupported] = useState(false);
+
+    useEffect(() => {
+        setIsFileSystemApiSupported('showDirectoryPicker' in window);
+    }, []);
+
+     useEffect(() => {
+        get('directoryHandle').then(handle => {
+            if (handle) {
+                setDirectoryHandle(handle);
+            }
+        });
+    }, []);
 
     const [systemSettings, setSystemSettings] = useLocalStorage<SystemSettings>('systemSettings', {
         businessType: 'clothing',
@@ -348,6 +363,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 return null;
             }
             const handle = await (window as any).showDirectoryPicker();
+            await set('directoryHandle', handle);
             setDirectoryHandle(handle);
             showToast(`Folder "${handle.name}" selected.`, 'success');
             return handle.name;
@@ -384,24 +400,32 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         if (directoryHandle) {
             try {
-                if (await directoryHandle.queryPermission({ mode: 'readwrite' }) !== 'granted') {
+                // Verify permission, and if it's not granted, request it.
+                // This is crucial for persistent access after the first selection.
+                const permission = await directoryHandle.queryPermission({ mode: 'readwrite' });
+                if (permission !== 'granted') {
                     if (await directoryHandle.requestPermission({ mode: 'readwrite' }) !== 'granted') {
                         showToast('Permission to write to folder was denied.', 'error');
+                        // Fallback to standard download if permission is denied.
                         downloadBackup(blob, fileName);
                         return;
                     }
                 }
+
+                // Now that we have permission, create or overwrite the backup file.
                 const fileHandle = await directoryHandle.getFileHandle(fileName, { create: true });
                 const writable = await fileHandle.createWritable();
                 await writable.write(blob);
                 await writable.close();
                 showToast(`Backup saved to your selected folder: ${fileName}`, 'success');
+
             } catch (err) {
                 console.error('Error saving to directory:', err);
                 showToast('Failed to save to folder. Downloading instead.', 'error');
                 downloadBackup(blob, fileName);
             }
         } else {
+            // Standard download if no directory is selected.
             downloadBackup(blob, fileName);
         }
     };
@@ -409,6 +433,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const value = {
         products, sales, suppliers, expenses, customers, companyInfo, systemSettings, categories, purchases, customerPayments,
         isInIframe,
+        isFileSystemApiSupported,
         addProduct, updateProduct, deleteProduct,
         addSale, deleteSale,
         addSupplier, updateSupplier, deleteSupplier,

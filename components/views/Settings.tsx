@@ -11,7 +11,7 @@ const Settings: React.FC = () => {
         resetAllData, importData, 
         addCategory, deleteCategory, updateCategory,
         selectDirectory, exportBackup,
-        isInIframe,
+        isInIframe, isFileSystemApiSupported,
     } = useData();
     const { t, language, setLanguage } = useLanguage();
     
@@ -216,6 +216,23 @@ const Settings: React.FC = () => {
 
                 {/* Right Column */}
                 <div className="space-y-6">
+                    {/* Logo and Fair Use Policy */}
+                    <div className="bg-white rounded-lg p-6 shadow-md">
+                        <img src="https://i.postimg.cc/s217jBk2/Swift-POS.png" alt="Swift POS Logo" className="mx-auto h-24 w-auto" />
+                        <div className="mt-4 p-4 border rounded-lg bg-gray-50 text-sm text-gray-700">
+                            <h4 className="font-bold text-center mb-2">Fair Use Policy – Swift POS</h4>
+                            <p className="mb-2">
+                                Swift POS is a proprietary software made publicly viewable on GitHub for learning, testing, and use within individual businesses. Users are permitted to download, modify, and use Swift POS for their own commercial operations; however, redistribution, resale, or rebranding of the software is strictly prohibited.
+                            </p>
+                            <p className="mb-2">
+                                All implementations or modified versions must include visible attribution stating “Powered by Swift POS.” Swift POS is provided “as is,” without any warranty or guarantee of performance or suitability. Users operate and deploy the software at their own risk.
+                            </p>
+                            <p>
+                                Swift POS is not designed to store or process data via cloud services. Users are responsible for managing their own data, either through local storage or personal cloud accounts. The developers of Swift POS do not collect, access, or retain any user data.
+                            </p>
+                        </div>
+                    </div>
+
                      {/* Storage Preferences */}
                      <div className="bg-white rounded-lg p-6 shadow-md">
                         <h3 className="text-xl font-semibold mb-4">{t('storage_preferences')}</h3>
@@ -258,14 +275,16 @@ const Settings: React.FC = () => {
                                  />
                                  <button
                                     onClick={handleChooseFolder}
-                                    disabled={storagePref === 'online' || isInIframe}
+                                    disabled={storagePref === 'online' || isInIframe || !isFileSystemApiSupported}
                                     className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
                                  >
                                     {t('choose_folder')}
                                  </button>
                             </div>
-                            {isInIframe && storagePref === 'local' && (
-                                <p className="text-xs text-yellow-800 bg-yellow-100 p-2 rounded-md -mt-2">{t('folder_selection_disabled_in_environment')}</p>
+                            {(isInIframe || !isFileSystemApiSupported) && storagePref === 'local' && (
+                                <p className="text-xs text-yellow-800 bg-yellow-100 p-2 rounded-md -mt-2">
+                                    {t(isFileSystemApiSupported ? 'folder_selection_disabled_in_environment' : 'Your browser does not support local folder access. Backups will be downloaded directly.')}
+                                </p>
                             )}
                             
                             <div>
